@@ -9,19 +9,19 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+area: "Operations and Management"
+workgroup: "Autonomic Networking Integrated Model and Approach"
 keyword:
  - next generation
  - unicorn
  - AI-native
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  group: "Autonomic Networking Integrated Model and Approach"
+  type: "Working Group"
+  mail: "anima@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/anima/"
+  github: "becarpenter/otp-casa"
+  latest: "https://becarpenter.github.io/otp-casa/draft-carpenter-anima-otp-casa.html"
 
 author:
  -
