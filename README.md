@@ -1,6 +1,6 @@
 <!-- regenerate: on (set to off if you edit this file) -->
 
-# TODO - Your title
+# One-time Pad for Authorizing Device Identity
 
 This is the working area for the individual Internet-Draft, "TODO - Your title".
 
