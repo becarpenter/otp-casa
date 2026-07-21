@@ -75,7 +75,7 @@ using the existing BRSKI protocol framework.
 
 This solution could be applicable to a corporate network that does not use
 manufacturer-installed IDevIDs at all. Alternatively, in a network
-using BRKSI for devices with IDevIDs, the solution could be used
+using BRSKI for devices with IDevIDs, the solution could be used
 in a heterogeneous mode for a subset of pledges for which either an IDevID
 or a MASA is unavailable. In the heterogeneous case, the normal BRSKI trust
 model for the whole ACP (Section 7.1 of {{RFC8995}}) is altered as
