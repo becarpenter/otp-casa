@@ -60,7 +60,7 @@ a self-signed certificate embedding a unique token selected from a one-time pad.
 # Introduction        {#intro}
 
 The Bootstrapping Remote Secure Key Infrastructure (BRSKI) mechanism is specified
-in {{RFC8995}}. It relies on two elements. The first is an X.509v3 certificate 
+in {{RFC8995}}. It relies on two elements. The first is an X.509v3 certificate
 formatted as an IEEE 802.1AR IDevID,
 installed in a device by its manufacturer. The second is a Manufacturer Authorized
 Signing Authority (MASA), a server that can certify that an IDevID is valid.
@@ -118,7 +118,10 @@ When an Installer authorizes a new device to connect, the following steps occur:
 
 1. The Installer picks a token from the APADL at random.
 2. This token is installed in the pledge and marked as "used" in the APADL.
-3. The pledge then executes code to create a key pair and an X.509v3 certificate in IDevID format. It contains contains the token ("serial-number" in BRSKI terms) and the pledge's new public key, and is self-signed. It is referred to as an ODevID (One-time Device ID) but is in effect an LDevID.
+3. The pledge then executes code to create a key pair and an X.509v3 certificate
+in IDevID format. It contains contains the token ("serial-number" in BRSKI terms)
+and the pledge's new public key, and is self-signed. It is referred to as an ODevID
+(One-time Device ID) but is in effect an LDevID.
 
 These steps SHOULD be embedded in code stored on the Installer's
 secure memory device, such that the token is never viewed by a human.
