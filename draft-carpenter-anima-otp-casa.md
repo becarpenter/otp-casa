@@ -134,13 +134,13 @@ using the ODevID in place of an IDevID.
 # Authorization
 
 In practice, the CASA and the Registrar will be a single software
-system, so no network protocol is needed between them. 
+system, so no network protocol is needed between them.
 When the Registrar receives a voucher request via EST, as per
 {{RFC8995}}, it will pass the request directly to the CASA.
 Instead of the checks normally carried out by a MASA, the CASA will
 extract the token ("serial-number") from the pledge's ODevID,
 and check if it is present and unused in the OPADL. If yes,
-the CASA will mark it as "claimed" in the OPADL, and issue the 
+the CASA will mark it as "claimed" in the OPADL, and issue the
 required voucher directly to the Registrar, allowing the BRSKI
 process to complete. If the token is not available in the OPADL,
 authorization will fail.
@@ -159,8 +159,8 @@ as "claimed" by the CASA but the voucher never reached the pledge.
 Section 7.1 of {{RFC8995}} summarizes the BRSKI trust model.
 The present document removes the requirement to trust equipment
 manufacturers, the integrity of their IDevID creation, and their
-MASA services. It also removes any security exposures during 
-communication between the Registrar and the MASA. 
+MASA services. It also removes any security exposures during
+communication between the Registrar and the MASA.
 
 On the other hand, it introduces a need to operate
 a CASA in a completely secure manner, and a need to trust the
