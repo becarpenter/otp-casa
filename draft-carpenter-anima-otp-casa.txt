@@ -4,8 +4,8 @@
 
 Autonomic Networking Integrated Model and Approach       B. E. Carpenter
 Internet-Draft                                         Univ. of Auckland
-Intended status: Standards Track                          18 August 2026
-Expires: 19 February 2027
+Intended status: Standards Track                        3 September 2026
+Expires: 7 March 2027
 
 
               One-time Pad for Authorizing Device Identity
@@ -14,10 +14,11 @@ Expires: 19 February 2027
 Abstract
 
    This document describes how devices joining an autonomic control
-   plane as defined in RFC 8994 may use the onboarding mechanism defined
-   in RFC 8995 even if they cannot use a manufacturer-installed X.509
-   certificate.  Instead, such devices may generate a self-signed
-   certificate embedding a unique token selected from a one-time pad.
+   plane as defined in RFC 8994 may use the BRSKI onboarding mechanism
+   defined in RFC 8995, even if they cannot provide a manufacturer-
+   installed X.509 IDevID certificate.  Instead, such devices may
+   generate a self-signed certificate embedding a unique token selected
+   from a one-time pad.
 
 About This Document
 
@@ -52,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 February 2027.
+   This Internet-Draft will expire on 7 March 2027.
 
 Copyright Notice
 
@@ -130,7 +131,7 @@ Table of Contents
 
    The CASA is essentially based on a list of randomly generated tokens.
    The tokens MUST be hard to guess, with a minimum size of at least 64
-   bits.  They SHOULD be a cryptographically strong random or pseudo-
+   bits.  They SHOULD be cryptographically strong random or pseudo-
    random numbers (see [RFC4086], Section 6.2).
 
    The list of tokens is referred to as the OPADL (One-time-PAD List,
@@ -175,7 +176,14 @@ Table of Contents
    secure memory device, such that the token is never viewed by a human.
 
    The pledge then starts the normal BRSKI process per [RFC8995], using
-   the ODevID in place of an IDevID.
+   the ODevID in place of an IDevID.  However, because the ODevID is
+   self-signed and thus has no CA issuer, the RFC8995 voucher request is
+   augmented by adding a pledge-self-cert binary element which carries
+   the ODevID certificate.  This is used by the registrar to verify the
+   signed voucher request, and the registrar *SHOULD* retain this
+   certificate (which includes the token, i.e. serial number).
+
+   TBD: update the YANG in RFC8995 accordingly.
 
 6.  Authorization
 
@@ -215,10 +223,14 @@ Table of Contents
    logs from the CASA.  If an APADL should be physically lost, all its
    tokens MUST immediately be marked as claimed in the OPADL.
 
-   The ODevIDs are self-signed.  This is not an issue because devices
-   present a certificate including a unique token from the OPADL, and so
-   they can be trusted exactly to the extent that the Installer is
-   trusted.
+   The ODevIDs are self-signed.  This is acceptable because each ODevID
+   certificate includes a unique token from the OPADL, and so can be
+   trusted exactly to the extent that the Installer is trusted.
+   However, this means that the BRSKI-EST TLS connection cannot rely on
+   a CA-signed IDevID as described in Section 5.1 of [RFC8995].  It
+   *SHOULD* rely on whatever corporate or general PKI is already in
+   place in the pledge.  In a stand-alone environment, an alternative is
+   to accept self-signed CMS structures.
 
    The Registrar and the CASA are trustworthy because they constitute a
    corporate entity and can present an end-entity certificate satisfying
@@ -226,7 +238,9 @@ Table of Contents
 
 8.  Implementation Status [RFC Editor: please remove]
 
-   Working...
+   See https://github.com/becarpenter/graspy/blob/master/casa for a
+   proof of concept.  It's amateur code from a security point of view.
+   DO NOT trust it in the slightest.
 
 9.  Security Considerations
 
@@ -239,6 +253,15 @@ Table of Contents
    reductions, since it caters for devices without manufacturer or
    ownership credentials.  For example, nonceless vouchers are never
    needed since the Registrar and the CASA are colocated.
+
+   However, since the pledge is issued a voucher on the basis of a self-
+   signed certificate, there is a plausible man-in-the middle attack by
+   a rogue BRSKI proxy, if it intercepts a voucher request, extracts the
+   token value, creates its own key pair, and simulates all subsequent
+   pledge actions.  Similarly, a rogue registrar could accept any pledge
+   without checking that its token is known to the genuine CASA
+   registrar.  Only good operational security can protect against such
+   attacks.
 
    The CASA is under local control so could safely be placed on the
    local side of an air gap.  In some scenarios, this may be considered
@@ -301,7 +324,7 @@ A.1.  Draft-00
 
 A.2.  Draft-01
 
-   *  Changes after partial proof-of-concept implementation
+   *  Many changes after a proof-of-concept implementation
 
 Acknowledgements
 

@@ -8,8 +8,8 @@
 <meta content="Brian E. Carpenter" name="author">
 <meta content="
        This document describes how devices joining an autonomic control plane as defined
-in RFC 8994 may use the onboarding mechanism defined in RFC 8995 even if they cannot
-use a manufacturer-installed X.509 certificate. Instead, such devices may generate
+in RFC 8994 may use the BRSKI onboarding mechanism defined in RFC 8995, even if they cannot
+provide a manufacturer-installed X.509 IDevID certificate. Instead, such devices may generate
 a self-signed certificate embedding a unique token selected from a one-time pad. 
     " name="description">
 <meta content="xml2rfc 3.34.0" name="generator">
@@ -26,11 +26,11 @@ a self-signed certificate embedding a unique token selected from a one-time pad.
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.3
+    platformdirs 4.11.7
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.2
+    wcwidth 0.8.3
 -->
 <link href="draft-carpenter-anima-otp-casa.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1046,11 +1046,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">One-time Pad for Device Identity</td>
-<td class="right">August 2026</td>
+<td class="right">September 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Carpenter</td>
-<td class="center">Expires 19 February 2027</td>
+<td class="center">Expires 7 March 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1063,12 +1063,12 @@ svg {
 <dd class="internet-draft">draft-carpenter-anima-otp-casa-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-08-18" class="published">18 August 2026</time>
+<time datetime="2026-09-03" class="published">3 September 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-02-19">19 February 2027</time></dd>
+<dd class="expires"><time datetime="2027-03-07">7 March 2027</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1082,8 +1082,8 @@ svg {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document describes how devices joining an autonomic control plane as defined
-in RFC 8994 may use the onboarding mechanism defined in RFC 8995 even if they cannot
-use a manufacturer-installed X.509 certificate. Instead, such devices may generate
+in RFC 8994 may use the BRSKI onboarding mechanism defined in RFC 8995, even if they cannot
+provide a manufacturer-installed X.509 IDevID certificate. Instead, such devices may generate
 a self-signed certificate embedding a unique token selected from a one-time pad.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1121,7 +1121,7 @@ a self-signed certificate embedding a unique token selected from a one-time pad.
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 February 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1258,7 +1258,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 a one-time pad.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The CASA is essentially based on a list of randomly generated
 tokens. The tokens <span class="bcp14">MUST</span> be hard to guess, with a minimum size of at
-least 64 bits. They <span class="bcp14">SHOULD</span> be a cryptographically strong random or
+least 64 bits. They <span class="bcp14">SHOULD</span> be cryptographically strong random or
 pseudo-random numbers (see <span>[<a href="#RFC4086" class="cite xref">RFC4086</a>]</span>, Section 6.2).<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">The list of tokens is referred to as the OPADL (One-time-PAD
 List, pronounced Oh-Paddle). It <span class="bcp14">MUST</span> be stored on long-term, backed-up and
@@ -1304,7 +1304,13 @@ be marked as "claimed" in the OPADL.<a href="#section-4-3" class="pilcrow">¶</a
 <p id="section-5-3">These steps <span class="bcp14">SHOULD</span> be embedded in code stored on the Installer's
 secure memory device, such that the token is never viewed by a human.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">The pledge then starts the normal BRSKI process per <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>,
-using the ODevID in place of an IDevID.<a href="#section-5-4" class="pilcrow">¶</a></p>
+using the ODevID in place of an IDevID. However, because the ODevID
+is self-signed and thus has no CA issuer, the RFC8995 voucher request
+is augmented by adding a <code>pledge-self-cert</code> binary element which
+carries the ODevID certificate. This is used by the registrar to
+verify the signed voucher request, and the registrar <strong><span class="bcp14">SHOULD</span></strong> retain
+this certificate (which includes the token, i.e. serial number).<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">TBD: update the YANG in RFC8995 accordingly.<a href="#section-5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authorization">
@@ -1350,9 +1356,13 @@ due to a compromised APADL is real, but can be traced after
 the event using logs from the CASA. If an APADL should be
 physically lost, all its tokens <span class="bcp14">MUST</span> immediately be marked as claimed
 in the OPADL.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">The ODevIDs are self-signed. This is not an issue because devices
-present a certificate including a unique token from the OPADL, and so
-they can be trusted exactly to the extent that the Installer is trusted.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-3">The ODevIDs are self-signed. This is acceptable because each ODevID
+certificate includes a unique token from the OPADL, and so
+can be trusted exactly to the extent that the Installer is trusted.
+However, this means that the BRSKI-EST TLS connection cannot rely on
+a CA-signed IDevID as described in Section 5.1 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>. It <strong><span class="bcp14">SHOULD</span></strong>
+rely on whatever corporate or general PKI is already in place in the pledge.
+In a stand-alone environment, an alternative is to accept self-signed CMS structures.<a href="#section-7-3" class="pilcrow">¶</a></p>
 <p id="section-7-4">The Registrar and the CASA are trustworthy because they constitute
 a corporate entity and can present an end-entity certificate satisfying corporate
 security requirements.<a href="#section-7-4" class="pilcrow">¶</a></p>
@@ -1363,7 +1373,8 @@ security requirements.<a href="#section-7-4" class="pilcrow">¶</a></p>
       <h2 id="name-implementation-status-rfc-e">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-implementation-status-rfc-e" class="section-name selfRef">Implementation Status [RFC Editor: please remove]</a>
       </h2>
-<p id="section-8-1">Working...<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">See <span><a href="https://github.com/becarpenter/graspy/blob/master/casa">https://github.com/becarpenter/graspy/blob/master/casa</a></span> for a proof of concept.
+It's amateur code from a security point of view. DO NOT trust it in the slightest.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
@@ -1378,8 +1389,14 @@ registrars and MASAs. The mechanism described in the present document removes th
 some of these reductions, since it caters for devices without manufacturer or ownership credentials.
 For example, nonceless vouchers are never needed since the Registrar and the CASA are
 colocated.<a href="#section-9-2" class="pilcrow">¶</a></p>
-<p id="section-9-3">The CASA is under local control so could safely be placed on the local side
-of an air gap. In some scenarios, this may be considered a security advantage.<a href="#section-9-3" class="pilcrow">¶</a></p>
+<p id="section-9-3">However, since the pledge is issued a voucher on the basis of a self-signed certificate,
+there is a plausible man-in-the middle attack by a rogue BRSKI proxy, if it intercepts
+a voucher request, extracts the token value, creates its own key pair, and simulates all
+subsequent pledge actions. Similarly, a rogue registrar could accept any pledge without
+checking that its token is known to the genuine CASA registrar. Only good operational
+security can protect against such attacks.<a href="#section-9-3" class="pilcrow">¶</a></p>
+<p id="section-9-4">The CASA is under local control so could safely be placed on the local side
+of an air gap. In some scenarios, this may be considered a security advantage.<a href="#section-9-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -1471,7 +1488,7 @@ of an air gap. In some scenarios, this may be considered a security advantage.<a
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-A.2-1.1">
-            <p id="appendix-A.2-1.1.1">Changes after partial proof-of-concept implementation<a href="#appendix-A.2-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-A.2-1.1.1">Many changes after a proof-of-concept implementation<a href="#appendix-A.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
