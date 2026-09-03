@@ -2,7 +2,7 @@
 
 # One-time Pad for Authorizing Device Identity
 
-This is the working area for the individual Internet-Draft, "TODO - Your title".
+This is the working area for the individual Internet-Draft, "One-time Pad for Authorizing Device Identity".
 
 * [Editor's Copy](https://becarpenter.github.io/otp-casa/#go.draft-carpenter-anima-otp-casa.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-carpenter-anima-otp-casa)
