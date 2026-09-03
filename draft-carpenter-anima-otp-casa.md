@@ -138,7 +138,7 @@ carries the ODevID certificate. This is used by the registrar to
 verify the signed voucher request, and the registrar __SHOULD__ retain
 this certificate (which includes the token, i.e. serial number).
 
-TBD: update the YANG in RFC8995 accordingly. 
+TBD: update the YANG in RFC8995 accordingly.
 
 # Authorization
 
